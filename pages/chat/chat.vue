@@ -45,7 +45,7 @@
 	export default {
 		data() {
 			return {
-				url: this.$url+'image/',
+				url: this.$url + 'image/',
 				tag: this.$t_data.get("tag"),
 				user_list: [],
 				src: 'http://n.sinaimg.cn/sinacn21/10/w480h330/20180829/218c-hikcahf5857486.jpg',
@@ -61,6 +61,15 @@
 		computed: {
 
 		},
+		watch: {
+			//监听路由变化
+			// 'getCurrentPages().pages[pages.length-1].route'(val) {
+			// 	//业务逻辑
+			// }
+		},
+		onShow(){
+		    this.getUserList()
+		},
 		onLoad() {
 			this.getUserList(),
 				//全局事件订阅，只要订阅了事件就可以收到值
@@ -68,8 +77,6 @@
 					// this.tag = this.$t_data.get("tag")
 					this.getUserList()
 				})
-
-
 		},
 		methods: {
 			getUserList() {
@@ -80,6 +87,13 @@
 				// }
 			},
 			btn_OnCar(item) {
+				for (var i = 0; i < this.user_list.length; i++) {
+					if(this.user_list[i].phone ==  item.phone ){
+						this.user_list[i].tag = 0
+						this.$t_data.set("user_list",this.user_list)
+					}
+				}
+				this.$t_data.set(item.phone, 0) //标记已读信息
 				this.$u.route('pages/chat/list/list', item);
 			}
 		}

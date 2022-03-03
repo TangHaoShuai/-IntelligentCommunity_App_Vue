@@ -101,6 +101,9 @@
 			})
 
 		},
+		onShow(){
+		    this.getUser()
+		},
 		methods: {
 			change(index) {
 				this.tab_current = index;
@@ -110,8 +113,8 @@
 			},
 			getUser() {
 				this.user_list = this.$t_data.get("user_list")
-				debugger
 				var km = 0;
+				//统计未读消息
 				for (var i = 0; i < this.user_list.length; i++) {
 					var m = parseInt(this.user_list[i].tag)
 					if (! isNaN(m)) {

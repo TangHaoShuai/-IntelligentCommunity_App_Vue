@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar class="uni_card" leftText="返回" :title="t_user.username" :safeAreaInsetTop="false"
+		<u-navbar :custom-back="back" class="uni_card" leftText="返回" :title="t_user.username" :safeAreaInsetTop="false"
 			:background="background" :height="48">
 
 		</u-navbar>
@@ -61,7 +61,8 @@
 </template>
 
 <script>
-	import store from '@/store/index.js'; //需要引入store
+	import store from '@/store/index.js' //需要引入store
+
 	export default {
 		data() {
 			return {
@@ -100,7 +101,11 @@
 			uni.$on("new_massage", (rel) => {
 				var char = rel;
 				if (char.t_name == this.userid) {
-					this.$t_data.set(char.s_name, 0) //标记已读信息
+					var pages = getCurrentPages() // 获取栈实例
+					let currentRoute = pages[pages.length - 1].route; // 获取当前页面路由
+					if (currentRoute == 'pages/chat/list/list') {
+						this.$t_data.set(char.s_name, 0) //标记已读信息
+					}
 					var tmp = {
 						"sName": char.s_name,
 						"message": char.msg,
@@ -139,6 +144,20 @@
 
 		},
 		methods: {
+			//返回
+			back() {
+				var user_list = this.$t_data.get("user_list")
+				for (var i = 0; i < user_list.length; i++) {
+					if (user_list[i].phone == this.t_user.phone) {
+						user_list[i].tag = 0
+						this.$t_data.set("user_list", user_list)
+					}
+				}
+				this.$u.route({
+					type: 'navigateBack',
+					delta: 1
+				})
+			},
 			//获取登录用户ID
 			getUserID() {
 				// if (typeof(this.$store.state.count) != "undefined") {
@@ -162,24 +181,26 @@
 
 			},
 			btn_Send() {
-				//发送消息
-				this.$websocket.sendMessage(
-					JSON.stringify({
-						s_name: this.userid,
-						msg: this.value,
-						t_name: this.t_user.phone,
-						type: "SPEAK"
-					})
-				)
 				//页面添加数据渲染视图
+
 				var tmp = {
 					"sName": this.userid,
 					"message": this.value,
 					"tName": this.t_user.phone,
-					"date": "2022-02-19 15:35:21",
+					"date": this.getDate(),
 					"label": this.userid
 				}
+				debugger
 				if (this.value != '') {
+					//发送消息
+					this.$websocket.sendMessage(
+						JSON.stringify({
+							s_name: this.userid,
+							msg: this.value,
+							t_name: this.t_user.phone,
+							type: "SPEAK"
+						})
+					)
 					this.data_list.push(tmp);
 				}
 				this.value = '' //制空输入框
@@ -205,6 +226,19 @@
 				this.$nextTick(() => {
 					this.scrollTop = 111111111
 				});
+			},
+			getDate() {
+				var date = new Date(),
+					year = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+				return timer;
 			}
 
 		}

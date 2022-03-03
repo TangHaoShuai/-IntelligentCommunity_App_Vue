@@ -26,8 +26,6 @@ Vue.prototype.$store = store
 
 const app = new Vue({
 	store,
-    ...App
+	...App
 })
 app.$mount()
-
-

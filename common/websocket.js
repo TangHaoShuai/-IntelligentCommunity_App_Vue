@@ -39,7 +39,7 @@ const _WEBSOCKET = {
 				var user_list = t_data.get("user_list") //获取用户集合
 				if (message.type == 'SPEAK') {
 					var mes = parseInt(t_data.get(message.s_name));		
-					if (mes == null || isNaN(mes) || typeof(mes) == "undefined") {
+					if (mes == null || isNaN(mes) || typeof(mes) == "undefined" || mes == 0 ) {
 						mes = 1 ;
 						t_data.set(message.s_name, mes) //标记未读信息
 					} else {
