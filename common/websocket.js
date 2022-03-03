@@ -43,7 +43,7 @@ const _WEBSOCKET = {
 						mes = 1 ;
 						t_data.set(message.s_name, mes) //标记未读信息
 					} else {
-						t_data.set(message.s_name, mes + 1) //标记未读信息
+						t_data.set(message.s_name, mes += 1) //标记未读信息
 					}
 					for (var i = 0; i < user_list.length; i++) {
 						if (user_list[i].phone == message.s_name) {

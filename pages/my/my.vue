@@ -11,8 +11,8 @@
 			<view>
 				<u-row>
 					<u-col span="4">
-						<u-avatar :src="src" size="180" mode="circle" style="margin: 20rpx;" :show-sex="true"
-							sex-icon="man"></u-avatar>
+						<u-avatar v-on:click="chooseAvatar()" :src="src" size="180" mode="circle" style="margin: 20rpx;"
+							:show-sex="true" sex-icon="man"></u-avatar>
 					</u-col>
 					<u-col span="8">
 						<view>昵称:{{user.username}}</view>
@@ -28,7 +28,7 @@
 				</view>
 				<u-cell-group>
 					<u-cell-item icon="../../static/company-fill.png" title="我的房子"></u-cell-item>
-					<u-cell-item icon="../../static/erweima.png" title="身份码" ></u-cell-item>
+					<u-cell-item icon="../../static/erweima.png" title="身份码"></u-cell-item>
 				</u-cell-group>
 				<view style="margin-bottom: 15rpx; margin-top: 15rpx;">
 					<p>系统设置</p>
@@ -52,7 +52,7 @@
 		data() {
 			return {
 				user: '',
-				src: 'http://n.sinaimg.cn/sinacn21/10/w480h330/20180829/218c-hikcahf5857486.jpg',
+				src: this.$url+'image/',
 				current: 2,
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
@@ -65,10 +65,49 @@
 			}
 		},
 		onLoad() {
-			this.user = this.$store.state.count
+			this.user = this.$t_data.get("user")
+			if (this.user.image == null) {
+				this.src = "../../static/tx.jpg"
+			} else {
+				this.src += this.user.image
+			}
+		},
+		created() {
+			// 监听从裁剪页发布的事件，获得裁剪结果
+			var url = this.$url
+			uni.$on('uAvatarCropper', path => {
+				this.src = path;
+				// 可以在此上传到服务端
+				uni.uploadFile({
+					url: url+'fileUpload',
+					filePath: path,
+					name: 'file',
+					formData: {
+						'id': this.user.phone
+					},
+					complete: (res) => {
+						console.log(res);
+					}
+				});
+			})
 		},
 		methods: {
-
+			chooseAvatar() {
+				// 此为uView的跳转方法，详见"文档-JS"部分，也可以用uni的uni.navigateTo
+				this.$u.route({
+					// 关于此路径，请见下方"注意事项"
+					url: '/uview-ui/components/u-avatar-cropper/u-avatar-cropper',
+					// 内部已设置以下默认参数值，可不传这些参数
+					params: {
+						// 输出图片宽度，高等于宽，单位px
+						destWidth: 300,
+						// 裁剪框宽度，高等于宽，单位px
+						rectWidth: 200,
+						// 输出的图片类型，如果'png'类型发现裁剪的图片太大，改成"jpg"即可
+						fileType: 'jpg',
+					}
+				})
+			},
 		}
 	}
 </script>

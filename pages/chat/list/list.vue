@@ -14,7 +14,7 @@
 					<u-row style="margin: 10rpx;" v-if="item.label == t_user.phone ">
 						<u-line style="margin: 5rpx;"></u-line>
 						<u-col span="2">
-							<u-avatar :src="src">
+							<u-avatar :src="url+t_user.image">
 							</u-avatar>
 						</u-col>
 						<u-col span="10">
@@ -31,7 +31,7 @@
 							<text> {{item.message}}</text>
 						</u-col>
 						<u-col span="2">
-							<u-avatar :src="src1">
+							<u-avatar :src="url+user.image">
 							</u-avatar>
 						</u-col>
 						<u-line style="margin: 5rpx;"></u-line>
@@ -65,10 +65,12 @@
 	export default {
 		data() {
 			return {
+				user: this.$t_data.get('user'),
+				url: this.$url + 'image/',
 				t_user: {}, //对方的账户消息 由上一个页面传过来的
 				userid: '', //登录者的ID
 				webSocket: null,
-				data_list: [], //聊天记录
+				data_list: null, //聊天记录
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -98,7 +100,7 @@
 			uni.$on("new_massage", (rel) => {
 				var char = rel;
 				if (char.t_name == this.userid) {
-					this.$t_data.set(char.s_name,0) //标记已读信息
+					this.$t_data.set(char.s_name, 0) //标记已读信息
 					var tmp = {
 						"sName": char.s_name,
 						"message": char.msg,
@@ -129,6 +131,13 @@
 				}
 			})
 		},
+		watch: {
+			data_list: function() {
+				this.roll()
+			},
+			deep: true
+
+		},
 		methods: {
 			//获取登录用户ID
 			getUserID() {
@@ -137,6 +146,7 @@
 				// 		this.userid = this.$store.state.count.phone
 				// }
 				this.userid = this.$t_data.get("user").phone
+				this.$t_data.set(this.userid, 0)
 			},
 			//获取聊天记录
 			getChatList() {
@@ -149,7 +159,7 @@
 					// 打印调用成功回调
 					// console.log(this)
 				})
-				
+
 			},
 			btn_Send() {
 				//发送消息
@@ -189,14 +199,14 @@
 				// console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
-			roll(){
+			roll() {
 				//滚动
 				this.scrollTop = this.old.scrollTop
 				this.$nextTick(() => {
-					this.scrollTop = 500000
+					this.scrollTop = 111111111
 				});
 			}
-			
+
 		}
 	}
 </script>

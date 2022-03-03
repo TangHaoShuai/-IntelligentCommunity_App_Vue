@@ -23,7 +23,7 @@
 			<u-row style="margin: 10rpx;" v-for="(item,index) in user_list" v-on:click="btn_OnCar(item)">
 				<u-line style="margin: 5rpx;"></u-line>
 				<u-col span="2">
-					<u-avatar :src="src">
+					<u-avatar :src="url+item.image">
 					</u-avatar>
 				</u-col>
 				<u-col span="9">
@@ -45,6 +45,7 @@
 	export default {
 		data() {
 			return {
+				url: this.$url+'image/',
 				tag: this.$t_data.get("tag"),
 				user_list: [],
 				src: 'http://n.sinaimg.cn/sinacn21/10/w480h330/20180829/218c-hikcahf5857486.jpg',

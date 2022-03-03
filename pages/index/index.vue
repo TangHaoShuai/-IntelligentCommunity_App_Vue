@@ -184,7 +184,7 @@
 			},
 			//获取用户列表
 			getUserList() {
-				this.$request('user/getUsers', {}, 'POST').then(res => {
+				this.$request('user/getUsers',this.userid, 'POST').then(res => {
 					if (res.length > 0) {
 						for (var i = 0; i < res.length; i++) {
 							var mes = parseInt(this.$t_data.get(res[i].phone));		

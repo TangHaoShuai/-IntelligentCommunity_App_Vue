@@ -110,6 +110,7 @@
 			},
 			getUser() {
 				this.user_list = this.$t_data.get("user_list")
+				debugger
 				var km = 0;
 				for (var i = 0; i < this.user_list.length; i++) {
 					var m = parseInt(this.user_list[i].tag)
