@@ -22,14 +22,13 @@
 			</view>
 			<!-- end Subsection 分段器-->
 			<!-- 贴子内容 beg -->
-			<u-card v-for="(item, index) in items" :title="title" :thumb="thumb" :thumb-width="60" :thumb-circle="true"
-				padding="8" v-on:click="btnOnArticle()">
+			<u-card v-for="(item, index) in articles" :title="item.user.username" :thumb="url+item.user.image"
+				:thumb-width="60" :thumb-circle="true" padding="8" v-on:click="btnOnArticle(item)">
 				<view class="" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between u-p-t-0">
-						<view class="u-body-item-title u-line-2">瓶身描绘的牡丹一如你初妆，冉冉檀香透过窗心事我了然，宣纸上走笔至此搁一半</view>
-						<image
-							src="https://img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg"
-							mode="aspectFill"></image>
+						<view class="u-body-item-title u-line-2">{{item.content}}</view>
+						<image v-if=" item.imgLists.length > 0 "
+							:src="imgurl+item.imgLists[0].imgUrl" mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="" slot="foot">
@@ -61,6 +60,9 @@
 	export default {
 		data() {
 			return {
+				imgurl: this.$url + 'image/article_img/', //文章图片
+				url: this.$url + 'image/', //头像
+				articles: null,
 				user_list: [],
 				tag: 0,
 				list: [{
@@ -81,8 +83,8 @@
 						message: 'Bar'
 					}
 				],
-				title: '隔壁村李寡妇Ae',
-				thumb: 'https://pic3.zhimg.com/80/v2-a1df4353e2664fbe021065607cf084ba_720w.jpg?source=1940ef5c',
+				title: ' ',
+				thumb: '../../static/tx.jpg',
 				current: 1,
 				keyword: '修水龙头事件',
 				background: {
@@ -97,6 +99,7 @@
 		},
 		onLoad() {
 			this.getUser();
+			this.getArticle();
 			uni.$on("new_massage", (rel) => {
 				this.getUser();
 			})
@@ -109,8 +112,11 @@
 			btn_Edit() {
 				this.$u.route('pages/life/edit/edit', {});
 			},
-			btnOnArticle() {
-				this.$u.route('pages/life/article/article', {});
+			btnOnArticle(item) {
+				var uuid = item.uuid
+				this.$u.route('pages/life/article/article', {
+					"uuid": uuid
+				});
 			},
 			change(index) {
 				this.tab_current = index;
@@ -129,7 +135,16 @@
 					}
 				}
 				this.tag = km
-
+			},
+			//获取帖子集合
+			getArticle() {
+				this.$request('article/getList', {}, 'POST').then(res => {
+					if (res != null) {
+						this.articles = res
+					}
+				}).catch(error => {
+					this.$u.toast('系统错误');
+				})
 			}
 		}
 	}
