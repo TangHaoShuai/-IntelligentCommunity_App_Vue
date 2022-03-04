@@ -2,7 +2,8 @@
 	<view>
 		<u-navbar :is-back="false" :background="background" title="生活圈" :height="48">
 			<view class="slot-wrap" slot="right">
-				<u-icon name="../../static/fabiao.png" color="#2979ff" size="46" style="margin-right: 15rpx;"></u-icon>
+				<u-icon name="../../static/fabiao.png" color="#2979ff" size="46" v-on:click="btn_Edit()"
+					style="margin-right: 15rpx;"></u-icon>
 				<u-badge type="error" :count="tag" size="mini" v-on:click="btn_OnChat()"></u-badge>
 				<u-icon name="../../static/xiaoxi.png" color="#2979ff" size="45" v-on:click="btn_OnChat()"></u-icon>
 
@@ -22,7 +23,7 @@
 			<!-- end Subsection 分段器-->
 			<!-- 贴子内容 beg -->
 			<u-card v-for="(item, index) in items" :title="title" :thumb="thumb" :thumb-width="60" :thumb-circle="true"
-				padding="8">
+				padding="8" v-on:click="btnOnArticle()">
 				<view class="" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between u-p-t-0">
 						<view class="u-body-item-title u-line-2">瓶身描绘的牡丹一如你初妆，冉冉檀香透过窗心事我了然，宣纸上走笔至此搁一半</view>
@@ -101,10 +102,16 @@
 			})
 
 		},
-		onShow(){
-		    this.getUser()
+		onShow() {
+			this.getUser()
 		},
 		methods: {
+			btn_Edit() {
+				this.$u.route('pages/life/edit/edit', {});
+			},
+			btnOnArticle() {
+				this.$u.route('pages/life/article/article', {});
+			},
 			change(index) {
 				this.tab_current = index;
 			},
@@ -117,7 +124,7 @@
 				//统计未读消息
 				for (var i = 0; i < this.user_list.length; i++) {
 					var m = parseInt(this.user_list[i].tag)
-					if (! isNaN(m)) {
+					if (!isNaN(m)) {
 						km += m;
 					}
 				}
