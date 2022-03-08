@@ -2,8 +2,8 @@
 	<view>
 		<u-navbar :is-back="false" :background="background" title="个人中心" :height="48">
 			<view class="slot-wrap" slot="right">
-				<u-badge type="error" count="3" size="mini"></u-badge>
-				<u-icon name="../../static/xiaoxi.png" color="#2979ff" size="45"></u-icon>
+				<!-- 	<u-badge type="error" count="3" size="mini"></u-badge>
+				<u-icon name="../../static/xiaoxi.png" color="#2979ff" size="45"></u-icon> -->
 			</view>
 		</u-navbar>
 		<view class="u-page">
@@ -17,8 +17,7 @@
 					<u-col span="8">
 						<view>昵称:{{user.username}}</view>
 						<view>账号:{{user.phone}}</view>
-						<view>爱好:{{user.u_describe}}</view>
-						<view>个性签名:{{user.u_describe}}</view>
+						<view>个性签名:{{user.uDescribe}}</view>
 					</u-col>
 				</u-row>
 			</view>
@@ -28,7 +27,7 @@
 				</view>
 				<u-cell-group>
 					<u-cell-item icon="../../static/company-fill.png" title="我的房子"></u-cell-item>
-					<u-cell-item icon="../../static/erweima.png" title="身份码"></u-cell-item>
+					<u-cell-item icon="../../static/erweima.png" title="身份码" v-on:click="idCard()"></u-cell-item>
 				</u-cell-group>
 				<view style="margin-bottom: 15rpx; margin-top: 15rpx;">
 					<p>系统设置</p>
@@ -52,7 +51,7 @@
 		data() {
 			return {
 				user: '',
-				src: this.$url+'image/',
+				src: this.$url + 'image/',
 				current: 2,
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
@@ -79,7 +78,7 @@
 				this.src = path;
 				// 可以在此上传到服务端
 				uni.uploadFile({
-					url: url+'fileUpload',
+					url: url + 'fileUpload',
 					filePath: path,
 					name: 'file',
 					formData: {
@@ -92,6 +91,9 @@
 			})
 		},
 		methods: {
+			idCard() {
+				this.$u.route("pages/index/Identity_card/Identity_card",{"tag":"my"})
+			},
 			chooseAvatar() {
 				// 此为uView的跳转方法，详见"文档-JS"部分，也可以用uni的uni.navigateTo
 				this.$u.route({

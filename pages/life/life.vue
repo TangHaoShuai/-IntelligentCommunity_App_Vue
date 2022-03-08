@@ -6,7 +6,6 @@
 					style="margin-right: 15rpx;"></u-icon>
 				<u-badge type="error" :count="tag" size="mini" v-on:click="btn_OnChat()"></u-badge>
 				<u-icon name="../../static/xiaoxi.png" color="#2979ff" size="45" v-on:click="btn_OnChat()"></u-icon>
-
 			</view>
 		</u-navbar>
 		<!-- beg 所有内容的容器 -->
@@ -27,20 +26,20 @@
 				<view class="" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between u-p-t-0">
 						<view class="u-body-item-title u-line-2">{{item.content}}</view>
-						<image v-if=" item.imgLists.length > 0 "
-							:src="imgurl+item.imgLists[0].imgUrl" mode="aspectFill"></image>
+						<image v-if=" item.imgLists.length > 0 " :src="imgurl+item.imgLists[0].imgUrl"
+							mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="" slot="foot">
 					<u-row>
 						<u-col span="4">
-							<u-icon name="../../static/liulan.png" size="34" color="" label="341"></u-icon>
+							<u-icon name="../../static/liulan.png" size="34" color="" :label="item.readCount"></u-icon>
 						</u-col>
 						<u-col span="4">
-							<u-icon name="../../static/pinglun.png" size="34" color="" label="30"></u-icon>
+							<u-icon name="../../static/pinglun.png" size="34" color="" :label="item.commentCount"></u-icon>
 						</u-col>
 						<u-col span="4">
-							<u-icon name="../../static/dianzan.png" size="34" color="" label="30"></u-icon>
+							<u-icon name="../../static/dianzan.png" size="34" color="" :label="item.praiseCount"></u-icon>
 						</u-col>
 					</u-row>
 				</view>
@@ -107,6 +106,7 @@
 		},
 		onShow() {
 			this.getUser()
+			this.getArticle()
 		},
 		methods: {
 			btn_Edit() {

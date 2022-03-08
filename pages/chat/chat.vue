@@ -22,10 +22,15 @@
 
 			<u-row style="margin: 10rpx;" v-for="(item,index) in user_list" v-on:click="btn_OnCar(item)">
 				<u-line style="margin: 5rpx;"></u-line>
-				<u-col span="2">
+				<u-col span="2" v-if="item.image">
 					<u-avatar :src="url+item.image">
 					</u-avatar>
 				</u-col>
+				<u-col span="2" v-else>
+					<u-avatar>
+					</u-avatar>
+				</u-col>
+
 				<u-col span="9">
 					<text>{{item.username}}</text>
 				</u-col>
@@ -67,8 +72,8 @@
 			// 	//业务逻辑
 			// }
 		},
-		onShow(){
-		    this.getUserList()
+		onShow() {
+			this.getUserList()
 		},
 		onLoad() {
 			this.getUserList(),
@@ -88,9 +93,9 @@
 			},
 			btn_OnCar(item) {
 				for (var i = 0; i < this.user_list.length; i++) {
-					if(this.user_list[i].phone ==  item.phone ){
+					if (this.user_list[i].phone == item.phone) {
 						this.user_list[i].tag = 0
-						this.$t_data.set("user_list",this.user_list)
+						this.$t_data.set("user_list", this.user_list)
 					}
 				}
 				this.$t_data.set(item.phone, 0) //标记已读信息

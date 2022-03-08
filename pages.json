@@ -15,7 +15,6 @@
 				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
 			}
-
 		}, {
 			"path": "pages/my/my",
 			"style": {
@@ -62,22 +61,65 @@
 				"navigationBarTitleText": "头像裁剪",
 				"navigationBarBackgroundColor": "#000000"
 			}
+		}, {
+			"path": "pages/life/article/article",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/edit/edit",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/comment/comment",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/Identity_card/Identity_card",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/service/service",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
 		}
 	    ,{
-            "path" : "pages/life/article/article",
+            "path" : "pages/index/service_list/service_list",
             "style" :                                                                                    
             {
-               "navigationStyle": "custom", // 隐藏系统导航栏
-               "navigationBarTextStyle": "white"
+              "navigationStyle": "custom", // 隐藏系统导航栏
+              "navigationBarTextStyle": "white"
             }
             
         }
         ,{
-            "path" : "pages/life/edit/edit",
+            "path" : "pages/index/edit/edit",
             "style" :                                                                                    
             {
-               "navigationStyle": "custom", // 隐藏系统导航栏
-               "navigationBarTextStyle": "white"
+            "navigationStyle": "custom", // 隐藏系统导航栏
+            "navigationBarTextStyle": "white"
+            }
+            
+        }
+        ,{
+            "path" : "pages/index/house/house",
+            "style" :                                                                                    
+            {
+              "navigationStyle": "custom", // 隐藏系统导航栏
+              "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
             }
             
         }
@@ -113,8 +155,8 @@
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
-			"name": "", //模式名称
-			"path": "", //启动页面，必选
+			"name": "swiper", //模式名称
+			"path": "pages/login/login", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}

@@ -3,7 +3,7 @@
 
 		<u-navbar :is-back="false" :background="background" title="社区" :height="48">
 			<!-- 自定义标题栏 -->
-			<view class="slot-wrap" slot="right">
+			<view class="slot-wrap" slot="right" v-on:click="scan2()">
 				<u-icon name="scan" color="#2979ff" size="45"></u-icon>
 			</view>
 		</u-navbar>
@@ -17,24 +17,24 @@
 			<view>
 				<!-- 功能栏 -->
 				<u-row justify="space-around" style="margin-top: 30rpx;">
-					<u-col span="4" style="text-align: center;" v-on:click="dataSet()">
+					<u-col span="4" style="text-align: center;" v-on:click="idCard()">
 						<u-icon name="../../static/userid2.png" color="#2979ff" size="70" label-pos="bottom"
 							label="身份卡">
 						</u-icon>
 					</u-col>
-					<u-col span="4" style="text-align: center;" v-on:click="dataGet()">
+					<u-col span="4" style="text-align: center;">
 						<u-icon name="../../static/wuyejiaofei.png" color="#2979ff" size="70" label-pos="bottom"
 							label="物业缴费">
 						</u-icon>
 					</u-col>
-					<u-col span="4" style="text-align: center;" v-on:click="dataDet()">
+					<u-col span="4" style="text-align: center;" v-on:click="house()">
 						<u-icon name="../../static/fangzi.png" color="#2979ff" size="70" label-pos="bottom"
 							label="我的房屋">
 						</u-icon>
 					</u-col>
 				</u-row>
 				<u-row justify="space-around" style="margin-top: 30rpx;">
-					<u-col span="4" style="text-align: center;">
+					<u-col span="4" style="text-align: center;" v-on:click="service()">
 						<u-icon name="../../static/weixiudian.png" color="#2979ff" size="70" label-pos="bottom"
 							label="报事报修">
 						</u-icon>
@@ -43,7 +43,7 @@
 						<u-icon name="../../static/tousu.png" color="#2979ff" size="70" label-pos="bottom" label="投诉建议">
 						</u-icon>
 					</u-col>
-					<u-col span="4" style="text-align: center;">
+					<u-col span="4" style="text-align: center;" v-on:click="servePhone()">
 						<u-icon name="../../static/dianhua.png" color="#2979ff" size="70" label-pos="bottom"
 							label="服务电话">
 						</u-icon>
@@ -151,18 +151,70 @@
 				success(res) { //成功回调函数
 					that._data.pH = res.windowHeight //windoHeight为窗口高度，主要使用的是这个
 					let titleH = uni.createSelectorQuery().select(".scroll-Y"); //想要获取高度的元素名（class/id）
-					titleH.boundingClientRect(data => {
-						uni.createSelectorQuery().select(".u_tab")
-							.boundingClientRect(cardBoundRect => {
-								let pH = that._data.pH;
-								that._data.navHeight = pH - data
-									.top //计算高度：元素高度=窗口高度-元素距离顶部的距离（data.top）
-							}).exec();
+					titleH.boundingClientRect(data => { //data  返回控件头部距离顶部的距离 
+						// uni.createSelectorQuery().select(".u_tab")
+						// 	.boundingClientRect(cardBoundRect => {
+						let pH = that._data.pH;
+						that._data.navHeight = pH - data
+							.top //计算高度：元素高度=窗口高度-元素距离顶部的距离（data.top）
+						// }).exec();
 					}).exec()
 				}
 			})
 		},
 		methods: {
+			house() {
+				this.$u.route("pages/index/house/house", {
+					"tag": "index"
+				})
+			},
+			service() {
+				this.$u.route("pages/index/service/service")
+			},
+			servePhone() {
+				//拨打电话
+				uni.makePhoneCall({
+					phoneNumber: "10086"
+				});
+			},
+			idCard() {
+				this.$u.route("pages/index/Identity_card/Identity_card", {
+					"tag": "index"
+				})
+			},
+			scan1() {
+				let that = this;
+				// 允许从相机和相册扫码
+				uni.scanCode({
+					success: function(res) {
+						that.result1 = res.result;
+					}
+				});
+			},
+			scan2() {
+				let that = this;
+				// 只允许通过相机扫码
+				uni.scanCode({
+					onlyFromCamera: true,
+					success: function(res) {
+						that.result2 = res.result;
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
+			},
+			scan3() {
+				let that = this;
+				// 调起条码扫描
+				uni.scanCode({
+					scanType: 'barCode',
+					success: function(res) {
+						that.result3 = res.result;
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
+			},
 			dataSet() {
 				// var userdata = {
 				// 	"current": 'tang',
@@ -184,18 +236,17 @@
 			},
 			//获取用户列表
 			getUserList() {
-				this.$request('user/getUsers',this.userid, 'POST').then(res => {
+				this.$request('user/getUsers', this.userid, 'POST').then(res => {
 					if (res.length > 0) {
 						for (var i = 0; i < res.length; i++) {
-							var mes = parseInt(this.$t_data.get(res[i].phone));		
-							if (! isNaN(mes)) {
+							var mes = parseInt(this.$t_data.get(res[i].phone));
+							if (!isNaN(mes)) {
 								res[i].tag = mes
 							}
 						}
 						this.$t_data.set("user_list", res)
 						console.log(res)
 					}
-
 				})
 			},
 
@@ -230,9 +281,7 @@
 			},
 			//建立socket连接
 			t_onShow() {
-				this.$websocket.connectSocket('ws://192.168.1.33:8088/chat/' + this.userid)
-
-
+				this.$websocket.connectSocket('ws://192.168.68.238:8088/chat/' + this.userid)
 				// this.heartBeatTest()
 				// this.$websocket.sendMessage(
 				// 	JSON.stringify({
