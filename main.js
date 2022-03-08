@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 
-Vue.prototype.$url = 'http://192.168.1.33:8088/'
+Vue.prototype.$url = 'http://192.168.31.68:8088/'
 
 //全局引用request
 import request from 'common/request.js'

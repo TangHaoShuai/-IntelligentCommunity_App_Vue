@@ -27,8 +27,8 @@
 				<view class="" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between u-p-t-0">
 						<view class="u-body-item-title u-line-2">{{item.content}}</view>
-						<image v-if=" item.imgLists.length > 0 "
-							:src="imgurl+item.imgLists[0].imgUrl" mode="aspectFill"></image>
+						<image v-if=" item.imgLists.length > 0 " :src="imgurl+item.imgLists[0].imgUrl"
+							mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="" slot="foot">
@@ -107,6 +107,7 @@
 		},
 		onShow() {
 			this.getUser()
+			this.getArticle()
 		},
 		methods: {
 			btn_Edit() {

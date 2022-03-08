@@ -7,8 +7,10 @@
 		<view class="u-page">
 			<u-input v-model="content" maxlength="2000" type="textarea" :border="true" height="500"
 				style="margin: 20rpx;" />
-			<u-upload :formData="fromdata" ref="uUpload" :action="action" :auto-upload="false"></u-upload>
+			<u-upload :formData="fromdata" ref="uUpload" :action="action" :auto-upload="false" @ @on-change="uploaded">
+			</u-upload>
 			<u-button @click="submit">提交</u-button>
+			<u-toast ref="uToast" />
 		</view>
 		<!-- beg 所有内容的容器 -->
 		<u-toast ref="uToast" />
@@ -38,6 +40,40 @@
 			this.user = this.$t_data.get("user")
 		},
 		methods: {
+			//延时
+			delay(){
+				uni.switchTab({
+					url: '/pages/life/life'
+				});
+			},
+			uploaded(res, index, lists, name) {
+				if (index + 1 == lists.length) {
+					var tmp = false
+					for (var i = 0; i < lists.length; i++) {
+						// debugger
+						if (lists[index].progress == 100) {
+							tmp = true
+						} else {
+							tmp = false
+						}
+					}
+					if (tmp) {
+						this.showToast('添加成功美滋滋', 'success')
+						setTimeout(this.delay, 1000)
+						
+					} else {
+						this.showToast('完蛋了添加失败失败', 'error')
+					}
+				}
+
+			},
+			showToast(title, type, back) {
+				this.$refs.uToast.show({
+					title: title,
+					type: type,
+					back: back
+				})
+			},
 			submit() {
 				// this.$refs.uUpload.formData.imgID = "123131321"
 				// this.$refs.uUpload.upload();
@@ -56,14 +92,16 @@
 							this.$refs.uUpload.upload();
 							let files = [];
 							// 通过filter，筛选出上传进度为100的文件(因为某些上传失败的文件，进度值不为100，这个是可选的操作)
-							files = this.$refs.uUpload.lists.filter(val => {
-								
-								return val.progress == 100;
-							})
+							// files = this.$refs.uUpload.lists.filter(val => {
+							// 	return val.progress == 100;
+							// })
 							// 如果您不需要进行太多的处理，直接如下即可
-							// files = this.$refs.uUpload.lists;
-							console.log(files)
+							files = this.$refs.uUpload.lists;
 						}
+						// this.showToast('添加成功', 'success')
+						// uni.switchTab({
+						// 	url: '/pages/life/life'
+						// });
 					})
 				}
 			},

@@ -62,26 +62,29 @@
 				"navigationBarTitleText": "头像裁剪",
 				"navigationBarBackgroundColor": "#000000"
 			}
+		}, {
+			"path": "pages/life/article/article",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/edit/edit",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/comment/comment",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
 		}
-	    ,{
-            "path" : "pages/life/article/article",
-            "style" :                                                                                    
-            {
-               "navigationStyle": "custom", // 隐藏系统导航栏
-               "navigationBarTextStyle": "white"
-            }
-            
-        }
-        ,{
-            "path" : "pages/life/edit/edit",
-            "style" :                                                                                    
-            {
-               "navigationStyle": "custom", // 隐藏系统导航栏
-               "navigationBarTextStyle": "white"
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",

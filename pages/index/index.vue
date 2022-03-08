@@ -3,7 +3,7 @@
 
 		<u-navbar :is-back="false" :background="background" title="社区" :height="48">
 			<!-- 自定义标题栏 -->
-			<view class="slot-wrap" slot="right">
+			<view class="slot-wrap" slot="right" v-on:click="scan2()">
 				<u-icon name="scan" color="#2979ff" size="45"></u-icon>
 			</view>
 		</u-navbar>
@@ -163,6 +163,39 @@
 			})
 		},
 		methods: {
+			scan1() {
+				let that = this;
+				// 允许从相机和相册扫码
+				uni.scanCode({
+					success: function(res) {
+						that.result1 = res.result;
+					}
+				});
+			},
+			scan2() {
+				let that = this;
+				// 只允许通过相机扫码
+				uni.scanCode({
+					onlyFromCamera: true,
+					success: function(res) {
+						that.result2 = res.result;
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
+			},
+			scan3() {
+				let that = this;
+				// 调起条码扫描
+				uni.scanCode({
+					scanType: 'barCode',
+					success: function(res) {
+						that.result3 = res.result;
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
+			},
 			dataSet() {
 				// var userdata = {
 				// 	"current": 'tang',
@@ -184,11 +217,11 @@
 			},
 			//获取用户列表
 			getUserList() {
-				this.$request('user/getUsers',this.userid, 'POST').then(res => {
+				this.$request('user/getUsers', this.userid, 'POST').then(res => {
 					if (res.length > 0) {
 						for (var i = 0; i < res.length; i++) {
-							var mes = parseInt(this.$t_data.get(res[i].phone));		
-							if (! isNaN(mes)) {
+							var mes = parseInt(this.$t_data.get(res[i].phone));
+							if (!isNaN(mes)) {
 								res[i].tag = mes
 							}
 						}
@@ -230,7 +263,7 @@
 			},
 			//建立socket连接
 			t_onShow() {
-				this.$websocket.connectSocket('ws://192.168.1.33:8088/chat/' + this.userid)
+				this.$websocket.connectSocket('ws://192.168.31.68:8088/chat/' + this.userid)
 
 
 				// this.heartBeatTest()
