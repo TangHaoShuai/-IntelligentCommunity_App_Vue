@@ -15,6 +15,7 @@
 				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
 			}
+
 		}, {
 			"path": "pages/my/my",
 			"style": {
@@ -95,35 +96,50 @@
 				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTextStyle": "white"
 			}
+		}, {
+			"path": "pages/life/article/article",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/edit/edit",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/life/comment/comment",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/service_list/service_list",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/edit/edit",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/house/house",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
+			}
+
 		}
-	    ,{
-            "path" : "pages/index/service_list/service_list",
-            "style" :                                                                                    
-            {
-              "navigationStyle": "custom", // 隐藏系统导航栏
-              "navigationBarTextStyle": "white"
-            }
-            
-        }
-        ,{
-            "path" : "pages/index/edit/edit",
-            "style" :                                                                                    
-            {
-            "navigationStyle": "custom", // 隐藏系统导航栏
-            "navigationBarTextStyle": "white"
-            }
-            
-        }
-        ,{
-            "path" : "pages/index/house/house",
-            "style" :                                                                                    
-            {
-              "navigationStyle": "custom", // 隐藏系统导航栏
-              "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",
