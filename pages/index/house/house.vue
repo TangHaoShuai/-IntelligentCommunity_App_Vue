@@ -6,12 +6,26 @@
 		</u-navbar>
 		<!-- beg 所有内容的容器 -->
 		<view class="u-page">
-			<p>{{this.user.house}}</p>
-			<u-select @confirm="confirm" v-model="show_select" mode="single-column" :list="list"></u-select>
-			<view v-on:click="bindingHouse()" class="t_empty" :style="{marginTop: navHeight}">
-				<u-empty :show="empty_show" icon-size="240" font-size="38" text="您还没有绑定房子 \n 点击我前去绑定房子" mode="list">
-				</u-empty>
+
+			<view v-if="user.house">
+				<u-image mode="widthFix" :src="src"></u-image>
+				<u-cell-group>
+					<u-cell-item icon="account-fill" :arrow="false" :title=" '业主账户:'+user.phone"></u-cell-item>
+					<u-cell-item icon="account-fill" :arrow="false" :title=" '业主名字:'+user.username "></u-cell-item>
+					<u-cell-item icon="integral-fill" :arrow="false" :title="'所在小区:'+user.house"></u-cell-item>
+					<u-cell-item icon="rmb-circle-fill" v-on:click="toPropertyFee()"
+						:title="'物业费余额:'+(user.propertyFee ==null?0:user.propertyFee)+'元'"></u-cell-item>
+				</u-cell-group>
 			</view>
+
+			<view>
+				<u-select @confirm="confirm" v-model="show_select" mode="single-column" :list="list"></u-select>
+				<view v-on:click="bindingHouse()" class="t_empty" :style="{marginTop: navHeight}">
+					<u-empty :show="empty_show" icon-size="240" font-size="38" text="您还没有绑定房子 \n 点击我前去绑定房子" mode="list">
+					</u-empty>
+				</view>
+			</view>
+
 		</view>
 		<!-- beg 所有内容的容器 -->
 
@@ -23,7 +37,9 @@
 	export default {
 		data() {
 			return {
+				src: this.$url + 'image/bieye.jpeg',
 				show_select: false,
+				empty_show: false,
 				list: [{
 						value: '1',
 						label: '盛世江南-湖岸'
@@ -56,7 +72,6 @@
 						label: '佳信红林新都'
 					}
 				],
-				empty_show: true,
 				user: {},
 				temp: '',
 				background: {
@@ -78,6 +93,11 @@
 				this.temp = options.tag
 			}
 			this.user = this.$t_data.get("user")
+			if (!this.user.house) {
+				this.empty_show = true
+			} else {
+				this.empty_show = false
+			}
 		},
 		methods: {
 			confirm(val) {
@@ -85,31 +105,43 @@
 				let state = false;
 				temp.house = val[0].label
 				this.$request('user/updateUser', temp, 'POST').then(res => {
-				})
-				this.$request('user/getUser', temp, 'POST').then(mzz => {
-					if (mzz.house) {
-						this.$t_data.set("user", mzz)
-						this.user = this.$t_data.get("user")
+					if (res) {
+						this.$request('user/getUser', temp, 'POST').then(mzz => {
+							if (mzz.house) {
+								this.$t_data.set("user", mzz)
+								this.user = this.$t_data.get("user")
+								if (this.user.house) {
+									this.empty_show = false
+								}
+							}
+						})
 					}
 				})
-
 			},
 			bindingHouse() {
 				this.show_select = true
+			},
+			toPropertyFee() {
+				this.$u.route("pages/index/property_fee/property_fee", {
+					"tag": "house"
+				})
 			},
 			back() {
 				if (this.temp == 'index') {
 					uni.switchTab({
 						url: '/pages/index/index'
 					});
-				} else {
+				} else if ((this.temp == 'my')) {
 					uni.switchTab({
 						url: '/pages/my/my'
 					});
+				} else {
+					uni.switchTab({
+						url: '/pages/index/index'
+					});
 				}
 			},
-		} // 每次刷新页面获取一次高度
-		,
+		},
 		onReady() {
 			let that = this;
 			uni.getSystemInfo({ //调用uni-app接口获取屏幕高度

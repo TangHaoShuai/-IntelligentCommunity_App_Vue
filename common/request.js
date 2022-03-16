@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.68.238:8088/'
+const baseUrl = 'http://192.168.31.68:8088/'
 const request = (url = '', date = {}, type = 'GET', header = {
 }) => {
     return new Promise((resolve, reject) => {

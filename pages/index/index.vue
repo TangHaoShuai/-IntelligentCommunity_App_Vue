@@ -3,7 +3,7 @@
 
 		<u-navbar :is-back="false" :background="background" title="社区" :height="48">
 			<!-- 自定义标题栏 -->
-			<view class="slot-wrap" slot="right" v-on:click="scan2()">
+			<view class="slot-wrap" slot="right" v-on:click="scan1()">
 				<u-icon name="scan" color="#2979ff" size="45"></u-icon>
 			</view>
 		</u-navbar>
@@ -22,7 +22,7 @@
 							label="身份卡">
 						</u-icon>
 					</u-col>
-					<u-col span="4" style="text-align: center;">
+					<u-col span="4" style="text-align: center;" v-on:click="propertyFee()">
 						<u-icon name="../../static/wuyejiaofei.png" color="#2979ff" size="70" label-pos="bottom"
 							label="物业缴费">
 						</u-icon>
@@ -39,8 +39,9 @@
 							label="报事报修">
 						</u-icon>
 					</u-col>
-					<u-col span="4" style="text-align: center;">
-						<u-icon name="../../static/tousu.png" color="#2979ff" size="70" label-pos="bottom" label="投诉建议">
+					<u-col span="4" style="text-align: center;" v-on:click="share()">
+						<u-icon name="../../static/gongxiang.png" color="#2979ff" size="70" label-pos="bottom"
+							label="社区共享">
 						</u-icon>
 					</u-col>
 					<u-col span="4" style="text-align: center;" v-on:click="servePhone()">
@@ -52,6 +53,7 @@
 			</view>
 			<!-- </u-sticky> -->
 
+			<!-- beg新闻 -->
 			<view class="huadong" style="margin-top: 25rpx;">
 				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
 					@scrolltolower="lower" @scroll="scroll" :style="{height:navHeight+'px'}">
@@ -72,6 +74,7 @@
 					<u-loadmore v-if="tem_show" :status="status" :loadText="loadText" />
 				</scroll-view>
 			</view>
+			<!-- end新闻 -->
 
 		</view>
 
@@ -85,6 +88,7 @@
 	export default {
 		data() {
 			return {
+				qRresult: '',
 				globalTimer: null, //定义定时器
 				userid: '',
 				tem_show: false,
@@ -102,10 +106,7 @@
 				},
 				t_data: [],
 				list: [
-					'各位出去在外的兄弟要注意隔壁老王上门修水龙头',
-					'隔壁村的李寡妇失踪了，看到的村民及时联系村长上报',
-					'最新特码一手资料，请联系18077229249',
-					'小康不是梦——广西的千年跨越'
+					'广告位置，请联系管理员投放广告!!!'
 				],
 				items: [{
 						message: 'Foo'
@@ -163,6 +164,16 @@
 			})
 		},
 		methods: {
+			share() {
+				this.$u.route("pages/index/share/share", {
+					"tag": "index"
+				})
+			},
+			propertyFee() {
+				this.$u.route("pages/index/property_fee/property_fee", {
+					"tag": "index"
+				})
+			},
 			house() {
 				this.$u.route("pages/index/house/house", {
 					"tag": "index"
@@ -187,7 +198,16 @@
 				// 允许从相机和相册扫码
 				uni.scanCode({
 					success: function(res) {
-						that.result1 = res.result;
+						that.qRresult = res.result;
+						// Share(uuid=521c6dfe9b6c4415a39df3e338477f37, name=123213, 
+						// description=213131313112, userid=,
+						//  begdate=, enddate=, state=, img=ee52114d42364943a8e2bd8328add1d6.jpg,
+						//   qrimg=tsd1647345647213.jpg) 
+						// var temp = that.qRresult.substr(6)
+						// var json = JSON.parse(that.qRresult);
+						that.$u.route("pages/index/item_description/item_description", {
+							"uuid": that.qRresult
+						})
 					}
 				});
 			},
@@ -245,7 +265,7 @@
 							}
 						}
 						this.$t_data.set("user_list", res)
-						console.log(res)
+						// console.log(res)
 					}
 				})
 			},
@@ -281,7 +301,7 @@
 			},
 			//建立socket连接
 			t_onShow() {
-				this.$websocket.connectSocket('ws://192.168.68.238:8088/chat/' + this.userid)
+				this.$websocket.connectSocket('ws://192.168.31.68:8088/chat/' + this.userid)
 				// this.heartBeatTest()
 				// this.$websocket.sendMessage(
 				// 	JSON.stringify({

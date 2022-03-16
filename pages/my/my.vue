@@ -26,7 +26,8 @@
 					<p>个人设置</p>
 				</view>
 				<u-cell-group>
-					<u-cell-item icon="../../static/company-fill.png" title="我的房子"></u-cell-item>
+					<u-cell-item icon="../../static/company-fill.png" title="我的房子" v-on:click="toMyHouse()">
+					</u-cell-item>
 					<u-cell-item icon="../../static/erweima.png" title="身份码" v-on:click="idCard()"></u-cell-item>
 				</u-cell-group>
 				<view style="margin-bottom: 15rpx; margin-top: 15rpx;">
@@ -82,17 +83,34 @@
 					filePath: path,
 					name: 'file',
 					formData: {
-						'id': this.user.phone
+						'id': this.user.phone,
+						'imgId': this.user.image
 					},
 					complete: (res) => {
-						console.log(res);
+						if (res.statusCode == 200) {
+							this.$request('user/getUser', this.user, 'POST').then(res => {
+								if (res != null) {
+									this.$t_data.set("user", res)
+									this.user = this.$t_data.get("user")
+								}
+							}).catch(error => {
+								this.$u.toast('系统错误');
+							})
+						}
 					}
 				});
 			})
 		},
 		methods: {
+			toMyHouse() {
+				this.$u.route("pages/index/house/house", {
+					"tag": "my"
+				})
+			},
 			idCard() {
-				this.$u.route("pages/index/Identity_card/Identity_card",{"tag":"my"})
+				this.$u.route("pages/index/Identity_card/Identity_card", {
+					"tag": "my"
+				})
 			},
 			chooseAvatar() {
 				// 此为uView的跳转方法，详见"文档-JS"部分，也可以用uni的uni.navigateTo

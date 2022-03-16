@@ -22,7 +22,6 @@
 		data() {
 			return {
 				fromdata: {},
-				filesArr: [],
 				user: {},
 				data: {},
 				action: this.$url + 'imgFileUpload',
@@ -40,16 +39,16 @@
 		},
 		methods: {
 			//延时
-			delay(){
+			delay() {
 				uni.switchTab({
 					url: '/pages/life/life'
 				});
 			},
+			//上传完成的回调
 			uploaded(res, index, lists, name) {
 				if (index + 1 == lists.length) {
 					var tmp = false
 					for (var i = 0; i < lists.length; i++) {
-						// debugger
 						if (lists[index].progress == 100) {
 							tmp = true
 						} else {
@@ -59,13 +58,13 @@
 					if (tmp) {
 						this.showToast('添加成功美滋滋', 'success')
 						setTimeout(this.delay, 1000)
-						
+
 					} else {
 						this.showToast('完蛋了添加失败失败', 'error')
 					}
 				}
-
 			},
+			//提示语
 			showToast(title, type, back) {
 				this.$refs.uToast.show({
 					title: title,
@@ -86,16 +85,26 @@
 						// debugger
 						// var message = JSON.parse(res) || {};
 						var message = res;
+
 						if (message.message == 200 && message.imgID != null) {
-							this.$refs.uUpload.formData.imgID = message.imgID
-							this.$refs.uUpload.upload();
 							let files = [];
+							files = this.$refs.uUpload.lists;
+							if (files.length > 0) {
+								//给准备上传的图片设置ID
+								this.$refs.uUpload.formData.imgID = message.imgID
+								this.$refs.uUpload.upload(); //上传
+							} else {
+								this.showToast('添加成功美滋滋', 'success')
+								setTimeout(this.delay, 1000)
+							}
+
+
 							// 通过filter，筛选出上传进度为100的文件(因为某些上传失败的文件，进度值不为100，这个是可选的操作)
 							// files = this.$refs.uUpload.lists.filter(val => {
 							// 	return val.progress == 100;
 							// })
 							// 如果您不需要进行太多的处理，直接如下即可
-							files = this.$refs.uUpload.lists;
+							// files = this.$refs.uUpload.lists;
 						}
 						// this.showToast('添加成功', 'success')
 						// uni.switchTab({

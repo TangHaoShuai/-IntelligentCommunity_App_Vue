@@ -138,9 +138,10 @@
 			},
 			//获取帖子集合
 			getArticle() {
-				this.$request('article/getList', {}, 'POST').then(res => {
+				let temp={"current":1,"size":999,"userid":"","content":""}
+				this.$request('article/getList', temp, 'POST').then(res => {
 					if (res != null) {
-						this.articles = res
+						this.articles = res.list
 					}
 				}).catch(error => {
 					this.$u.toast('系统错误');

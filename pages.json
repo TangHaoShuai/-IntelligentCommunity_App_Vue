@@ -139,7 +139,34 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/index/property_fee/property_fee",
+            "style" :                                                                                    
+            {
+              "navigationStyle": "custom", // 隐藏系统导航栏
+              "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
+            }
+            
+        }
+        ,{
+            "path" : "pages/index/share/share",
+            "style" :                                                                                    
+            {
+               "navigationStyle": "custom", // 隐藏系统导航栏
+               "navigationBarTextStyle": "white"
+            }
+            
+        }
+        ,{
+            "path" : "pages/index/item_description/item_description",
+            "style" :                                                                                    
+            {
+               "navigationStyle": "custom", // 隐藏系统导航栏
+               "navigationBarTextStyle": "white"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",
