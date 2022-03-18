@@ -190,7 +190,6 @@
 					"date": this.getDate(),
 					"label": this.userid
 				}
-				debugger
 				if (this.value != '') {
 					//发送消息
 					this.$websocket.sendMessage(

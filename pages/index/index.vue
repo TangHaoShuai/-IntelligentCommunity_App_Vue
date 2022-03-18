@@ -11,7 +11,7 @@
 			<!-- 所有内容的容器 -->
 			<view>
 				<!-- 滚动通知 -->
-				<u-notice-bar mode="horizontal" :list="list"></u-notice-bar>
+				<u-notice-bar mode="horizontal" :list="message_list"></u-notice-bar>
 			</view>
 			<!-- <u-sticky> -->
 			<view>
@@ -58,7 +58,7 @@
 				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
 					@scrolltolower="lower" @scroll="scroll" :style="{height:navHeight+'px'}">
 					<u-card :title="item.title" :sub-title="item.newTime" :thumb="thumb"
-						v-for="(item, index) in t_data.list" v-on:body-click="tem_test(item)">
+						v-for="(item, index) in t_data.list" v-on:body-click="on_news_itme(item)">
 						<view class="" slot="body" :id="index">
 							<view class="u-body-item u-flex u-border-bottom u-col-between u-p-t-0">
 								<view class="u-body-item-title u-line-2">{{item.title}}</view>
@@ -105,7 +105,8 @@
 					scrollTop: 0
 				},
 				t_data: [],
-				list: [
+				// 通知数组
+				message_list: [
 					'广告位置，请联系管理员投放广告!!!'
 				],
 				items: [{
@@ -140,6 +141,7 @@
 			this.t_onShow();
 			this.getList();
 			this.getUserList();
+			this.getMessage();
 			//监听收到消息
 			// uni.onSocketMessage((res) => {
 			// 	console.log('INDEX页面收到服务器内容：' + res.data)
@@ -199,12 +201,6 @@
 				uni.scanCode({
 					success: function(res) {
 						that.qRresult = res.result;
-						// Share(uuid=521c6dfe9b6c4415a39df3e338477f37, name=123213, 
-						// description=213131313112, userid=,
-						//  begdate=, enddate=, state=, img=ee52114d42364943a8e2bd8328add1d6.jpg,
-						//   qrimg=tsd1647345647213.jpg) 
-						// var temp = that.qRresult.substr(6)
-						// var json = JSON.parse(that.qRresult);
 						that.$u.route("pages/index/item_description/item_description", {
 							"uuid": that.qRresult
 						})
@@ -235,25 +231,7 @@
 					}
 				});
 			},
-			dataSet() {
-				// var userdata = {
-				// 	"current": 'tang',
-				// 	"size": 5
-				// }
-				// this.$t_data.set("users", userdata, true)
-				// console.log("数据保存成功")
 
-				this.$t_data.set("15778676033", 1) //标记未读信息
-				this.$t_data.set("18077229249", 1) //标记未读信息
-			},
-			dataGet() {
-				var m = this.$t_data.get("user_list")
-				console.log(m)
-			},
-			dataDet() {
-				this.$t_data.del("users")
-				console.log("数据删除成功")
-			},
 			//获取用户列表
 			getUserList() {
 				this.$request('user/getUsers', this.userid, 'POST').then(res => {
@@ -269,7 +247,21 @@
 					}
 				})
 			},
-
+			//获取服务器公告（通知）
+			getMessage() {
+				let temp = {
+					"current": '1',
+					"size": '999',
+					"message": ''
+				}
+				this.$request('message/selectPage', temp, 'POST').then(res => {
+					let message_temp = []
+					for (var i = 0; i < res.list.length; i++) {
+						message_temp.push(res.list[i].message)
+					}
+					this.message_list = message_temp
+				})
+			},
 			//心跳检测
 			heartBeatTest() {
 				//清除定时器
@@ -301,7 +293,7 @@
 			},
 			//建立socket连接
 			t_onShow() {
-				this.$websocket.connectSocket('ws://192.168.31.68:8088/chat/' + this.userid)
+				this.$websocket.connectSocket(this.$websocketIP + this.userid)
 				// this.heartBeatTest()
 				// this.$websocket.sendMessage(
 				// 	JSON.stringify({
@@ -322,8 +314,8 @@
 				//关闭socket
 				// this.$websocket.closeSocket()
 			},
-
-			tem_test(item) {
+			// 点击新闻item
+			on_news_itme(item) {
 				this.$u.route('pages/news/news', {
 					"url": item.url
 				});
@@ -357,6 +349,7 @@
 				// console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
+			// 获取新闻数据
 			getList() {
 				this.$request('news/getNewsPage', {
 					"current": this.current,

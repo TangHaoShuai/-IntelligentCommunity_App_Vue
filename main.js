@@ -2,7 +2,9 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 
-Vue.prototype.$url = 'http://192.168.31.68:8088/'
+let ip = '192.168.31.68'
+Vue.prototype.$url = 'http://'+ip+':8088/'
+Vue.prototype.$websocketIP = 'ws://'+ip+':8088/chat/'
 
 //全局引用request
 import request from 'common/request.js'

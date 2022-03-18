@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar leftText="返回" title="文章内容" :safeAreaInsetTop="false" :background="background" :height="48">
+		<u-navbar  :custom-back="back" leftText="返回" title="文章内容" :safeAreaInsetTop="false" :background="background" :height="48">
 
 		</u-navbar>
 		<!-- beg 所有内容的容器 -->
@@ -25,19 +25,22 @@
 							<view> {{data.date}} </view>
 						</u-col>
 						<u-col span="3">
+							<!-- 删除文章 -->
 							<view v-if="user.phone == data.user.phone " style="margin-left: 10rpx; color: #FA3534;"
-								@click="show = true">删除</view>
+								@click="del_data_show = true">删除</view>
 						</u-col>
 						<u-col span="3.5">
 							<u-row justify="flex-end">
-								<u-icon @click="show_2 = true" name="../../../static/diandian.png" size="34" color=""
+								<!-- 三个点点 -->
+								<u-icon @click="praise_comment_show = true" name="../../../static/diandian.png" size="34" color=""
 									label="" />
 							</u-row>
 						</u-col>
 					</u-row>
 				</view>
-				<u-action-sheet @click="click" :list="list" v-model="show"></u-action-sheet>
-				<u-action-sheet @click="click_2" :list="list_2" v-model="show_2"></u-action-sheet>
+				<!-- 底部操作菜单 -->
+				<u-action-sheet @click="del_data_click" :list="del_data" v-model="del_data_show"></u-action-sheet>
+				<u-action-sheet @click="praise_comment_click" :list="praise_comment" v-model="praise_comment_show"></u-action-sheet>
 			</view>
 			<view class="">
 				<u-row style="background-color: #f6f8fa;">
@@ -75,12 +78,12 @@
 				user: {
 					phone: ''
 				},
-				list: [{
+				del_data: [{
 					text: '删除'
 				}],
-				list_2: null,
-				show: false,
-				show_2: false,
+				praise_comment: null,
+				del_data_show: false,
+				praise_comment_show: false,
 				imgurl: this.$url + 'image/article_img/', //文章图片
 				url: this.$url + 'image/', //头像
 				data: {
@@ -101,16 +104,17 @@
 
 		},
 		watch: {
+			//监听isPraise值的变化 如果已经点赞 把点赞的底部菜单改成取消点赞
 			isPraise: {
 				handler(newName, oldName) {
 					if (newName) {
-						this.list_2 = [{
+						this.praise_comment = [{
 							text: '取消点赞'
 						}, {
 							text: '评论'
 						}]
 					} else {
-						this.list_2 = [{
+						this.praise_comment = [{
 							text: '点赞'
 						}, {
 							text: '评论'
@@ -129,6 +133,12 @@
 			this.getPathParam()
 		},
 		methods: {
+			back() {
+				uni.switchTab({
+					url: '/pages/life/life'
+				});
+			},
+			//查询整个文章的数据
 			getOneArticle() {
 				this.$request('article/getOneArticle', {
 					"id": this.articleid
@@ -178,9 +188,9 @@
 				})
 			},
 			//点赞评论
-			click_2(index) {
+			praise_comment_click(index) {
 				if (index == 0) {
-					if (!this.isPraise) {
+					if (!this.isPraise) {  //判断是否已经点赞 如果点了 就else 取消点赞
 						if (this.articleid != '' && this.articleid) {
 							//点赞
 							this.$request('praise/addPraise', {
@@ -218,16 +228,17 @@
 						}
 					}
 				}
-				if (index == 1) {
+				if (index == 1) { //跳到评论界面
 					this.$u.route('pages/life/comment/comment', {
 						"articleid": this.articleid
 					});
 				}
 			},
-			click(index) {
+			// 删除文章
+			del_data_click(index) {
 				if (index == 0 && this.data.imgid) {
 					this.$request('article/deleteArticle', {
-						"id": this.data.imgid,
+						"imgid": this.data.imgid,
 						"articleid": this.articleid
 					}, 'POST').then(res => {
 						if (res == '200') {
