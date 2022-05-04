@@ -1,4 +1,5 @@
 <template>
+	<!-- 共享物品确认共享页面 -->
 	<view>
 		<u-navbar :custom-back="back" leftText="返回" title="物品简介" :safeAreaInsetTop="false" :background="background"
 			:height="48">

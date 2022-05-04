@@ -1,7 +1,7 @@
 <template>
+	<!-- 消息列表 -->
 	<view>
 		<u-navbar leftText="返回" title="消息" :safeAreaInsetTop="false" :background="background" :height="48">
-
 		</u-navbar>
 		<!-- beg 所有内容的容器 -->
 		<view class="center">
@@ -34,7 +34,7 @@
 				<u-col span="9">
 					<text>{{item.username}}</text>
 				</u-col>
-				<u-col span="1">
+				<u-col span="1" v-if="item.tag">
 					<p style="color:#FA3534;">{{item.tag}}</p>
 				</u-col>
 				<u-line style="margin: 5rpx;"></u-line>

@@ -12,9 +12,9 @@
 				<u-row>
 					<u-col span="4">
 						<u-avatar v-on:click="chooseAvatar()" :src="src" size="180" mode="circle" style="margin: 20rpx;"
-							:show-sex="true" sex-icon="man"></u-avatar>
+							:show-sex="true" :sex-icon="sex"></u-avatar>
 					</u-col>
-					<u-col span="8">
+					<u-col span="8" v-on:click="upUser()">
 						<view>昵称:{{user.username}}</view>
 						<view>账号:{{user.phone}}</view>
 						<view>个性签名:{{user.uDescribe}}</view>
@@ -34,10 +34,13 @@
 					<p>系统设置</p>
 				</view>
 				<u-cell-group>
-					<u-cell-item icon="../../static/prompt-fill.png" title="帮助中心"></u-cell-item>
-					<u-cell-item icon="../../static/star-fill.png" title="去评分"></u-cell-item>
-					<u-cell-item icon="../../static/sketch-square-fill.png" title="商务合作"></u-cell-item>
-					<u-cell-item icon="../../static/setting-fill.png" title="检查更新" value="新版本"></u-cell-item>
+					<u-cell-item icon="../../static/prompt-fill.png" v-on:click="hint()" title="帮助中心"></u-cell-item>
+					<u-cell-item icon="../../static/star-fill.png" v-on:click="hint()" title="去评分"></u-cell-item>
+					<u-cell-item icon="../../static/sketch-square-fill.png" v-on:click="hint()" title="商务合作">
+					</u-cell-item>
+					<u-cell-item icon="../../static/setting-fill.png" v-on:click="hint()" title="检查更新" value="新版本">
+					</u-cell-item>
+					<u-cell-item icon="../../static/setting-fill.png" title="退出登录" v-on:click="quit()"></u-cell-item>
 				</u-cell-group>
 			</view>
 		</view>
@@ -51,8 +54,9 @@
 	export default {
 		data() {
 			return {
+				sex: 'man', //性别图标
 				user: '',
-				src: this.$url + 'image/',
+				src: '',
 				current: 2,
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
@@ -64,13 +68,30 @@
 				return store.state.vuex_tabbar
 			}
 		},
-		onLoad() {
+		onShow() {
+			let url =  this.$url + 'image/'
 			this.user = this.$t_data.get("user")
+			if (this.user.sex == "男") {
+				this.sex = "man"
+			} else if (this.user.sex == "女") {
+				this.sex = "woman"
+			} else {
+				this.sex = "man"
+			}
 			if (this.user.image == null) {
 				this.src = "../../static/tx.jpg"
 			} else {
-				this.src += this.user.image
+				this.src = url + this.user.image
 			}
+		},
+		onLoad() {
+			this.user = this.$t_data.get("user")
+			// let url = this.src
+			// if (this.user.image == null) {
+			// 	this.src = "../../static/tx.jpg"
+			// } else {
+			// 	this.src = url + this.user.image
+			// }
 		},
 		created() {
 			// 监听从裁剪页发布的事件，获得裁剪结果
@@ -90,8 +111,14 @@
 						if (res.statusCode == 200) {
 							this.$request('user/getUser', this.user, 'POST').then(res => {
 								if (res != null) {
+									let url =  this.$url + 'image/'
 									this.$t_data.set("user", res)
 									this.user = this.$t_data.get("user")
+									if (this.user.image == null) {
+										this.src = "../../static/tx.jpg"
+									} else {
+										this.src = url + this.user.image
+									}
 								}
 							}).catch(error => {
 								this.$u.toast('系统错误');
@@ -102,6 +129,16 @@
 			})
 		},
 		methods: {
+			hint() {
+				this.$u.toast('开发中，敬请期待');
+			},
+			upUser() {
+				this.$u.route("pages/my/up_user/up_user", {})
+			},
+			quit() {
+				this.$u.toast('退出成功');
+				this.$u.route("pages/login/login", {})
+			},
 			toMyHouse() {
 				this.$u.route("pages/index/house/house", {
 					"tag": "my"

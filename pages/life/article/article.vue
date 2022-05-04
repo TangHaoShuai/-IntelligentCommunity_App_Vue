@@ -1,4 +1,5 @@
 <template>
+	<!-- 文章详细内容 -->
 	<view>
 		<u-navbar  :custom-back="back" leftText="返回" title="文章内容" :safeAreaInsetTop="false" :background="background" :height="48">
 
@@ -17,8 +18,14 @@
 			</view>
 
 			<view class="u-content">
-				<u-parse :html="content"></u-parse>
-				<!-- <u-image width="100%" height="500rpx"  v-for="(item,index) in this.data.imgLists" :src="imgurl+item.imgUrl"></u-image> -->
+				<!-- <u-parse :html="content"></u-parse> -->
+				<view>
+					<p style="text-indent:2em;">{{data.content}}</p>
+				</view>
+				<view style="margin: 20rpx;" >
+					<u-image border-radius="30" style="margin-top: 20rpx;" width="100%" height="500rpx" mode="aspectFill"  v-for="(item,index) in this.data.imgLists" :src="imgurl+item.imgUrl"></u-image>
+				</view>
+				
 				<view style="margin: 10rpx;">
 					<u-row>
 						<u-col span="5">

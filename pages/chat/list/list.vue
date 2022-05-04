@@ -1,4 +1,5 @@
 <template>
+	<!-- 在线聊天 -->
 	<view>
 		<u-navbar :custom-back="back" class="uni_card" leftText="返回" :title="t_user.username" :safeAreaInsetTop="false"
 			:background="background" :height="48">

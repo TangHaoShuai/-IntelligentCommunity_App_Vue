@@ -166,6 +166,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/up_user/up_user",
+            "style" :                                                                                    
+            {
+              "navigationStyle": "custom", // 隐藏系统导航栏
+              "navigationBarTextStyle": "white"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

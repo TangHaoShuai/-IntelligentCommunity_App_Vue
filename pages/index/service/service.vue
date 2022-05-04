@@ -1,4 +1,5 @@
 <template>
+	<!-- 报事报修 -->
 	<view>
 		<u-navbar leftText="返回" :custom-back="back" title="报事报修" :background="background" :height="48">
 			<view class="slot-wrap" slot="right">
@@ -13,7 +14,7 @@
 				<u-subsection :list="list" @change="change"></u-subsection>
 			</view>
 
-			<u-cell-group :border="false" v-if="fromData[0].message">
+			<u-cell-group :border="false" v-if="fromData[0]">
 				<view v-for="(item,index) in fromData" v-on:click="onServerList(item)" style="margin-bottom: 40rpx;">
 					<u-cell-item :border-top="true" :border-bottom="false" style="padding-bottom: 0;padding-top: 5rpx;"
 						:title="item.message">
@@ -36,6 +37,7 @@
 	export default {
 		data() {
 			return {
+				user: '',
 				list: [{
 						name: '正在处理'
 					},
@@ -59,7 +61,11 @@
 
 		},
 		onLoad() {
+			this.user = this.$t_data.get("user")
 			this.getCommunityServices()
+		},
+		onShow() {
+			this.user = this.$t_data.get("user")
 		},
 		methods: {
 			// 分段器监听
@@ -69,18 +75,13 @@
 				}
 				if (index == 1) {
 					this.$request('community-services/getCommunityServices', {
-						"state": "处理完成"
+						"state": "处理完成",
+						"userid": this.user.phone
 					}, 'POST').then(res => {
 						if (res.length > 0) {
 							this.fromData = res
 						} else {
-							this.fromData = [{
-								uuid: '',
-								userid: '',
-								message: '',
-								date: '',
-								state: ''
-							}]
+							this.fromData = []
 						}
 					}).catch(
 						error => {
@@ -98,10 +99,13 @@
 				this.$u.route('pages/index/edit/edit');
 			},
 			onServerList(item) {
-				this.$u.route('pages/index/service_list/service_list',item);
+				this.$u.route('pages/index/service_list/service_list', item);
 			},
 			getCommunityServices() {
-				this.$request('community-services/getCommunityServices', {}, 'POST').then(res => {
+				console.log(this.user)
+				this.$request('community-services/getCommunityServices', {
+					"userid": this.user.phone
+				}, 'POST').then(res => {
 					if (res) {
 						this.fromData = res
 					}

@@ -1,4 +1,5 @@
 <template>
+	<!-- 身份卡 -->
 	<view>
 		<u-navbar leftText="返回" :custom-back="back" title="身份卡" :safeAreaInsetTop="false" :background="background"
 			:height="48">

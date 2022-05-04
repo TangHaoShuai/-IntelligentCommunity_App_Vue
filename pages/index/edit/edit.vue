@@ -1,16 +1,16 @@
 <template>
+	<!-- 添加服务 -->
 	<view>
 		<u-navbar leftText="返回" title="编辑内容" :safeAreaInsetTop="false" :background="background" :height="48">
-
 		</u-navbar>
 		<!-- beg 所有内容的容器 -->
 		<view class="u-page">
 			<u-input v-model="content" maxlength="2000" type="textarea" :border="true" height="500"
 				style="margin: 20rpx;" />
-			<u-button  :disabled="disabled" @click="submit">提交</u-button>
+			<u-button :disabled="disabled" @click="submit">提交</u-button>
 			<u-toast ref="uToast" />
 		</view>
-		<!-- beg 所有内容的容器 -->
+		<!-- eng 所有内容的容器 -->
 	</view>
 </template>
 
@@ -19,7 +19,7 @@
 	export default {
 		data() {
 			return {
-				disabled:false,
+				disabled: false,
 				service: {},
 				user: {},
 				content: '',

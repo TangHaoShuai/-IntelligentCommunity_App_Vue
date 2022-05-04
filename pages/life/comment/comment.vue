@@ -1,4 +1,5 @@
 <template>
+	<!-- 文章评论 -->
 	<view>
 		<u-navbar leftText="返回" title="评论" :safeAreaInsetTop="false" :background="background" :height="48">
 

@@ -12,12 +12,12 @@
 		<view class="u-page">
 			<!-- beg 搜索框 -->
 			<view style="margin: 20rpx;">
-				<u-search placeholder="日照香炉生紫烟" v-model="keyword"></u-search>
+				<u-search placeholder="输入内容" v-model="keyword" @search="getArticleLk" @custom="getArticleLk"></u-search>
 			</view>
 			<!-- end 搜索框 -->
 			<!-- Subsection 分段器 -->
 			<view style="margin: 0rpx 15rpx;">
-				<u-subsection :list="list" :subsection_current="1"></u-subsection>
+				<u-subsection :list="list" :subsection_current="1" @change="change"></u-subsection>
 			</view>
 			<!-- end Subsection 分段器-->
 			<!-- 贴子内容 beg -->
@@ -36,10 +36,12 @@
 							<u-icon name="../../static/liulan.png" size="34" color="" :label="item.readCount"></u-icon>
 						</u-col>
 						<u-col span="4">
-							<u-icon name="../../static/pinglun.png" size="34" color="" :label="item.commentCount"></u-icon>
+							<u-icon name="../../static/pinglun.png" size="34" color="" :label="item.commentCount">
+							</u-icon>
 						</u-col>
 						<u-col span="4">
-							<u-icon name="../../static/dianzan.png" size="34" color="" :label="item.praiseCount"></u-icon>
+							<u-icon name="../../static/dianzan.png" size="34" color="" :label="item.praiseCount">
+							</u-icon>
 						</u-col>
 					</u-row>
 				</view>
@@ -85,7 +87,7 @@
 				title: ' ',
 				thumb: '../../static/tx.jpg',
 				current: 1,
-				keyword: '修水龙头事件',
+				keyword: '',
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
 				},
@@ -119,7 +121,21 @@
 				});
 			},
 			change(index) {
-				this.tab_current = index;
+				this.subsection_current = index;
+				let temp = {
+					"current": 1,
+					"size": 999,
+					"userid": "",
+					"content": "",
+					"tag":index
+				}
+				this.$request('article/getList', temp, 'POST').then(res => {
+					if (res != null) {
+						this.articles = res.list
+					}
+				}).catch(error => {
+					this.$u.toast('系统错误');
+				})
 			},
 			btn_OnChat() {
 				this.$u.route('pages/chat/chat', {});
@@ -138,7 +154,28 @@
 			},
 			//获取帖子集合
 			getArticle() {
-				let temp={"current":1,"size":999,"userid":"","content":""}
+				let temp = {
+					"current": 1,
+					"size": 999,
+					"userid": "",
+					"content": ""
+				}
+				this.$request('article/getList', temp, 'POST').then(res => {
+					if (res != null) {
+						this.articles = res.list
+					}
+				}).catch(error => {
+					this.$u.toast('系统错误');
+				})
+			},
+			getArticleLk() {
+				console.log(1111)
+				let temp = {
+					"current": 1,
+					"size": 999,
+					"userid": "",
+					"content": this.keyword
+				}
 				this.$request('article/getList', temp, 'POST').then(res => {
 					if (res != null) {
 						this.articles = res.list

@@ -12,8 +12,11 @@
 			<u-gap height="80"></u-gap>
 			<button @click="submit" class="getSmsCode">登录</button>
 			<view class="alternative">
-				<view class="password" @click="passwordLogin()">忘记密码</view>
+				<view class="password" @click="forget_the_password()">忘记密码</view>
 				<view class="issue" @click="loginBy()">注册</view>
+			</view>
+			<view>
+				<u-toast ref="uToast" />
 			</view>
 		</view>
 	</view>
@@ -24,8 +27,8 @@
 		data() {
 			return {
 				globalTimer: null, //定义定时器
-				userName: '18077229249',
-				password: '123123',
+				userName: '',
+				password: '',
 			}
 		},
 		computed: {
@@ -35,6 +38,15 @@
 			
 		},
 		methods: {
+			showToast() {
+				this.$refs.uToast.show({
+					title: '登录成功',
+					type: 'success',
+					duration: 1000,
+					isTab: true,
+					url: '/pages/index/index'
+				})
+			},
 			submit() {
 				this.$request('user/getUser', {
 					"phone": this.userName,
@@ -42,13 +54,13 @@
 				}, 'POST').then(res => {
 					if (res.username != null) {
 						this.$store.state.count = res
-						this.$t_data.set("user",res)
-						// this.$u.toast('登录成功');
-						uni.switchTab({
-							url: '/pages/index/index'
-						});
+						this.$t_data.set("user", res)
+						this.showToast();
 					} else {
-						this.$u.toast('账户密码错误');
+						this.$refs.uToast.show({
+							title: '账户密码错误',
+							type: 'error'
+						})
 					}
 				}).catch(error => {
 					this.$u.toast('系统错误');
@@ -58,7 +70,7 @@
 				// this.$u.toast('开发中，敬请期待');
 				this.$u.route('pages/register/register');
 			},
-			passwordLogin() {
+			forget_the_password() {
 				this.$u.toast('开发中，敬请期待');
 			},
 

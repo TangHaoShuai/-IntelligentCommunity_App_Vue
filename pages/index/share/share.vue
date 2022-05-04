@@ -1,4 +1,5 @@
 <template>
+	<!-- 共享 -->
 	<view>
 		<u-navbar :custom-back="back" leftText="返回" title="我的共享" :safeAreaInsetTop="false" :background="background"
 			:height="48">

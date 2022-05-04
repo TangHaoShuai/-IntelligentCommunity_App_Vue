@@ -92,7 +92,7 @@
 				globalTimer: null, //定义定时器
 				userid: '',
 				tem_show: false,
-
+				user: '',
 				// 通过status设置组件的状态，加载前值为loadmore，加载中为loading，没有数据为nomore
 				status: 'loading',
 				loadText: {
@@ -136,11 +136,16 @@
 				return store.state.vuex_tabbar
 			}
 		},
+		onShow() {
+			this.getUserList()
+			this.user = this.$t_data.get("user")
+			this.getMessage();
+			this.getUserList();
+		},
 		onLoad() {
 			this.getUserID();
 			this.t_onShow();
 			this.getList();
-			this.getUserList();
 			this.getMessage();
 			//监听收到消息
 			// uni.onSocketMessage((res) => {
@@ -172,9 +177,16 @@
 				})
 			},
 			propertyFee() {
-				this.$u.route("pages/index/property_fee/property_fee", {
-					"tag": "index"
-				})
+				console.log(this.user.house)
+				if (this.user.house == null || this.user.house == '') {
+					this.$u.route("pages/index/house/house", {
+						"tag": "index"
+					})
+				} else {
+					this.$u.route("pages/index/property_fee/property_fee", {
+						"tag": "index"
+					})
+				}
 			},
 			house() {
 				this.$u.route("pages/index/house/house", {

@@ -1,4 +1,5 @@
 <template>
+	<!-- 编辑文章 -->
 	<view>
 		<u-navbar leftText="返回" title="编辑文章" :safeAreaInsetTop="false" :background="background" :height="48">
 

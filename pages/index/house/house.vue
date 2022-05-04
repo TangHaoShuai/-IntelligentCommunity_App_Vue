@@ -1,4 +1,5 @@
 <template>
+	<!-- 我的房子 -->
 	<view>
 		<u-navbar :custom-back="back" leftText="返回" title="我的房子" :safeAreaInsetTop="false" :background="background"
 			:height="48">

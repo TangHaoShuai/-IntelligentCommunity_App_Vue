@@ -15,6 +15,7 @@ const _WEBSOCKET = {
 			//监听socket连接
 			uni.onSocketOpen((res) => {
 				this.isOpen = true
+				//连接socket
 				console.log('WebSocket连接已打开！')
 				if (successFunc) {
 					successFunc(res)
@@ -24,6 +25,12 @@ const _WEBSOCKET = {
 			uni.onSocketError((res) => {
 				this.isOpen = false
 				console.log('WebSocket连接打开失败，请检查！')
+				uni.connectSocket({
+					url,
+					success() {
+						console.log('websocket重新连接成功！')
+					}
+				})
 				if (errorFunc) {
 					errorFunc(res)
 				}
@@ -38,9 +45,9 @@ const _WEBSOCKET = {
 				var message = JSON.parse(res.data) || {};
 				var user_list = t_data.get("user_list") //获取用户集合
 				if (message.type == 'SPEAK') {
-					var mes = parseInt(t_data.get(message.s_name));		
-					if (mes == null || isNaN(mes) || typeof(mes) == "undefined" || mes == 0 ) {
-						mes = 1 ;
+					var mes = parseInt(t_data.get(message.s_name));
+					if (mes == null || isNaN(mes) || typeof(mes) == "undefined" || mes == 0) {
+						mes = 1;
 						t_data.set(message.s_name, mes) //标记未读信息
 					} else {
 						t_data.set(message.s_name, mes += 1) //标记未读信息
@@ -50,10 +57,9 @@ const _WEBSOCKET = {
 							user_list[i].tag = mes
 						}
 					}
-					t_data.set("user_list",user_list)
+					t_data.set("user_list", user_list)
 					uni.$emit("new_massage", message) //发送广播
 				}
-
 			})
 			//监听socket关闭
 			uni.onSocketClose((res) => {

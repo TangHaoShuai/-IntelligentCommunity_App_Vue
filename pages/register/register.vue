@@ -11,8 +11,8 @@
 			<u-form-item label="昵称" prop="name" labelWidth="160" leftIcon="phone">
 				<u-input v-model="form.name" class="form-item" placeholder="请输入你的名字" />
 			</u-form-item>
-			<u-form-item label="手机号码" prop="mobile" labelWidth="160" leftIcon="man-add">
-				<u-input v-model="form.mobile" class="form-item" placeholder="请输入你的手机号码" />
+			<u-form-item label="手机号码" prop="phone" labelWidth="160" leftIcon="man-add">
+				<u-input v-model="form.phone" class="form-item" placeholder="请输入你的手机号码" />
 			</u-form-item>
 			<u-form-item label="登录密码" prop="password" labelWidth="160" leftIcon="level">
 				<u-input v-model="form.password" class="form-item" placeholder="请输入密码" />
@@ -31,6 +31,9 @@
 			</u-form-item>
 		</u-form>
 		<u-button @click="submit" class="">提交</u-button>
+		<view>
+			<u-toast ref="uToast" />
+		</view>
 	</view>
 </template>
 
@@ -43,10 +46,10 @@
 				},
 				avatar: 'https://cdn.uviewui.com/uview/common/logo.png',
 				form: {
-					mobile: '18077229249',
-					name: '唐冠希',
-					password: '123123',
-					newpassword: '123123'
+					phone: '',
+					name: '',
+					password: '',
+					newpassword: ''
 				},
 				list: [{
 						name: '男',
@@ -96,7 +99,7 @@
 							trigger: ['change', 'blur']
 						},
 					],
-					mobile: [{
+					phone: [{
 							required: true,
 							message: '请输入电话号码',
 							trigger: ['change', 'blur'],
@@ -130,18 +133,33 @@
 					if (valid) {
 						this.$request('user/addUser', {
 							"username": this.form.name,
-							"phone": this.form.mobile,
+							"phone": this.form.phone,
 							"password": this.form.password,
 							"sex": this.value,
 						}, 'POST').then(res => {
 							// 打印调用成功回调
 							console.log(res)
-							if (res == 200) {
-								uni.navigateBack(2)
-								this.$u.toast('注册成功');
+							if (res) {
+								// uni.navigateBack(2)
+								// this.$u.toast('注册成功');
+								this.$refs.uToast.show({
+									title: '注册成功',
+									type: 'success',
+									duration: 1000,
+									isTab: false,
+									url: '/pages/login/login'
+								})
 							} else {
-								this.$u.toast('注册失败');
+								this.$refs.uToast.show({
+									title: '账户已经存在',
+									type: 'error'
+								})
 							}
+						}).catch(error => {
+							this.$refs.uToast.show({
+								title: '系统错误',
+								type: 'error'
+							})
 						})
 						// console.log('验证通过');
 					} else {

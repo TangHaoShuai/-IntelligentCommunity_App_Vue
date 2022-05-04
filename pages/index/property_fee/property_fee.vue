@@ -1,4 +1,5 @@
 <template>
+	<!-- 物业缴费 -->
 	<view>
 		<u-navbar :custom-back="back" leftText="返回" title="物业缴费" :safeAreaInsetTop="false" :background="background"
 			:height="48">
